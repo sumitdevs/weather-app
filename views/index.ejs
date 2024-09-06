@@ -1,7 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weatherApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/styles/output.css">
+</head>
+<body class="flex flex-col justify-center items-center bg-gray-900 "  >
+    <div class="grid grid-cols-1  lg:grid-cols-6 w-full max-w-5xl gap-8 px-4 sm:px-16 lg:px-0 my-10 md:my-20 lg:my-40">
+        <div id="weather-search" class="bg-gray-800 lg:h-[85%] lg:col-span-2   px-4 py-6 flex flex-col rounded-xl
+          items-center gap-4 ">
+          <form action="/" method="POST" class="w-full">
+            <div class="relative flex justify-center items-center w-full">
+                    <input type="text" placeholder="<%= data.error || 'Enter City Name' %>" name="location" class=" w-full px-2 py-2 border  rounded-md focus:outline-none text-white
+                    border-gray-600 bg-transparent">
+                   <button type="submit" class=" absolute right-3 top-1">
+                    <i class="bi bi-search text-white text-2xl"></i>
+                   </button>
+            </form>
+            </div>
+            <div class="flex w-full justify-evenly">
+                <h1 class="text-8xl  font-extralight text-white px-2 py-2 font-display flex"><%= Math.round(locals.data.main.temp) %><span class="text-5xl">°C</span></h1>
+                <img class="object-contain w-[80px] self-end" src="https://openweathermap.org/img/wn/<%=data.weather[0].icon%>@4x.png" alt="">
+            </div>
+            <hr class="border border-t-0  border-x-0 w-full border-gray-600">
+            <div class="flex flex-col  w-full gap-2 text-white">
+                <span class="flex gap-2">
+                    <i class="bi bi-geo-fill"></i>
+                    <p><%= locals.data.name %></p>
+                </span>
+                <span class="flex gap-2">
+                    <i class="bi bi-cloud"></i>
+                    <p><%= locals.data.weather[0].description %></p>
+                </span>
+            </div>
+        </div>
+        <div id="display-weather" class="bg-gray-800  text-white lg:col-span-4 rounded-xl">
+            <h2 class="text-xl px-4 py-2">Today's Highlights</h2>
+            <div class="grid grid-cols-2  sm:grid-cols-3 lg:grid-cols-4 px-4 py-6 gap-2">
+                <div class="flex flex-col bg-black px-4 gap-4 py-4 rounded-xl ">
+                    <p class="text-base text-gray-500">Max/Min Temp</p>
+                    <div class="flex flex-col gap-1">
+                        <span class="flex gap-3 items-center">
+                            <div class=" bg-blue-300 rounded-full h-[30px] w-[30px] flex justify-center">
+                                <i class="bi bi-thermometer-half text-lg text-black"></i>
+                            </div>
+                            <p class="text-lg"><%= Math.round(locals.data.main.temp_max) %>°C</p>
+                        </span>
+                        <span class="flex gap-3 items-center">
+                            <div class=" bg-blue-300 rounded-full h-[30px] w-[30px] flex justify-center">
+                                <i class="bi bi-thermometer-half text-lg text-black"></i>
+                            </div>
+                            <p class="text-lg"><%= Math.round(locals.data.main.temp_min) %>°C</p>
+                        </span>
+                    </div>
+                </div>
+                <div class="flex flex-col bg-black px-4 gap-4 py-4 rounded-xl ">
+                    <p class="text-base text-gray-500">Sunrise/Sunset</p>
+                    <div class="flex flex-col gap-1">
+                        <span class="flex gap-3 items-center">
+                            <div class=" bg-blue-300 rounded-full h-[30px] w-[30px] flex justify-center">
+                                <i class="bi bi-thermometer-half text-lg text-black"></i>
+                            </div>
+                            <% let srdate = new Date(data.sys.sunrise*1000); %>
+                            <p class="text-lg"><%= srdate.getHours() %>:<%= srdate.getMinutes()  %> AM</p>
+                        </span>
+                        <span class="flex gap-3 items-center">
+                            <div class=" bg-blue-300 rounded-full h-[30px] w-[30px] flex justify-center">
+                                <i class="bi bi-thermometer-half text-lg text-black"></i>
+                            </div>
+                            <% let date = new Date(data.sys.sunset*1000); %>
+                            <p class="text-lg"><%= date.getHours()-12 %>:<%= date.getMinutes() %> PM</p>
+                        </span>
+                        
+                    </div>
+                </div>
 
-<%- include('partials/header.ejs') %>
-<div>
-    <h1>Hello world</h1>
-</div>
+                <div class="flex flex-col bg-black px-4 gap-4 py-4 rounded-xl ">
+                    <p class="text-base text-gray-500">Feels Like</p>
+                    <div class="flex flex-col gap-1">
+                        <span class="flex gap-3 items-center">
+                            <div class=" bg-blue-300 rounded-full h-[30px] w-[30px] flex justify-center">
+                                <i class="bi bi-thermometer-half text-lg text-black"></i>
+                            </div>
+                            <p class="text-4xl"><%= Math.round(locals.data.main.feels_like) %>°C</p>
+                        </span>
+                    </div>
+                </div>
 
-<%- include('partials/footer.ejs') %>
+                <div class="flex flex-col bg-black px-4 gap-4 py-4 rounded-xl ">
+                    <p class="text-base text-gray-500">Humidity</p>
+                    <div class="flex flex-col gap-1">
+                        <span class="flex gap-3 items-center">
+                            <div class=" bg-blue-300 rounded-full h-[30px] w-[30px] flex justify-center">
+                                <i class="bi bi-thermometer-half text-lg text-black"></i>
+                            </div>
+                            <p class="text-4xl"><%= Math.round(locals.data.main.humidity) %>%</p>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col bg-black px-4 gap-4 py-4 rounded-xl ">
+                    <p class="text-base text-gray-500">Wind Speed</p>
+                    <div class="flex flex-col gap-1">
+                        <span class="flex gap-3 items-center">
+                            <div class=" bg-blue-300 rounded-full h-[30px] w-[30px] flex justify-center">
+                                <i class="bi bi-thermometer-half text-lg text-black"></i>
+                            </div>
+                            <p class="text-xl"><%= locals.data.wind.speed.toFixed(1) %> <span class="text-sm w-full">Km/hr</span></p>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col bg-black px-4 gap-4 py-4 rounded-xl ">
+                    <p class="text-base text-gray-500">Pressure</p>
+                    <div class="flex flex-col gap-1">
+                        <span class="flex gap-3 items-center">
+                            <div class=" bg-blue-300 rounded-full h-[30px] w-[30px] flex justify-center">
+                                <i class="bi bi-thermometer-half text-lg text-black"></i>
+                            </div>
+                            <p class="text-xl"><%= locals.data.main.pressure %> <span class="text-sm w-full">Km</span></p>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
